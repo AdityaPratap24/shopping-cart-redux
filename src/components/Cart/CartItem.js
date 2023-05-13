@@ -1,43 +1,42 @@
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { cartActions, cartItemActions } from '../Store';
+import { useDispatch } from 'react-redux';
+import { cartActions} from '../Store';
 import classes from './CartItem.module.css';
 
 const CartItem = (props) => {
-  const [qty, setQty] = useState(1);
-  const { title, total, price } = props.item;
+  const { title, price, quantity, prodId } = props.item;
+
+  const dispatch = useDispatch();
   const handleIncreaseQty = (e) => {
     e.preventDefault();
-    setQty(qty + 1)
+    dispatch(cartActions.setCartItemIncrease(prodId))
   }
   const handleDecreaseQty = (e) => {
     e.preventDefault();
-    if (qty > 0) {
-      setQty(qty - 1);
+    if (quantity > 0) {
+      dispatch(cartActions.setCartItemDecrease(prodId))
     }
+    dispatch(cartActions.setCartFilter());
   }
 
 
   return (
-    <div>
-      <li className={classes.item}>
-        <header>
-          <h3>{title}</h3>
-          <div className={classes.price}>
-            ${total.toFixed(2)}{' '}
-            <span className={classes.itemprice}>(${price.toFixed(2)}/item)</span>
-          </div>
-        </header>
-        <div className={classes.details}>
-          <div className={classes.quantity}>
-            x <span>{qty}</span>
-          </div>
-          <div className={classes.actions}>
-            <button onClick={handleDecreaseQty}>-</button>
-            <button onClick={handleIncreaseQty}>+</button>
-          </div>
+    <div className={classes.item}>
+      <header>
+        <h3>{title}</h3>
+        <div className={classes.price}>
+          ${(price * quantity).toFixed(2)}{' '}
+          <span className={classes.itemprice}>(${price.toFixed(2)}/item)</span>
         </div>
-      </li>
+      </header>
+      <div className={classes.details}>
+        <div className={classes.quantity}>
+          x <span>{quantity}</span>
+        </div>
+        <div className={classes.actions}>
+          <button onClick={handleDecreaseQty}>-</button>
+          <button onClick={handleIncreaseQty}>+</button>
+        </div>
+      </div>
     </div>
   );
 };

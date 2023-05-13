@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import Card from '../UI/Card';
 import classes from './Cart.module.css';
@@ -9,19 +8,20 @@ const Cart = (props) => {
   const cartList = useSelector(state => state.cart.cartItems);
   return (
     <Card className={classes.cart}>
-      <h2>Your Shopping Cart</h2>
-      <ul>
-        {
-          cartList.map((item) => {
-            return <li>
-              <CartItem
-                item={{ title: item.title, total: 18, price: item.price }}
-              />
-            </li>
-          })
-        }
+        <h2>Your Shopping Cart</h2>
+        <ul>
+          {
+            cartList.map((item) => {
+              return <li key={item.prodId}>
+                <CartItem key={item.prodId}
+                  item={{ title: item.title, total: 18, price: item.price, prodId: item.prodId, quantity: item.quantity }}
+                />
+              </li>
+            })
+          }
 
-      </ul>
+        </ul>
+
     </Card>
   );
 };
